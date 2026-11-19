@@ -829,6 +829,7 @@ WhatsApp {PHONE_INTL} (Hebrew and English)
                                          ensure_ascii=False, indent=2))
     write("assets/favicon.svg", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#f2b8c6"/>'
           '<path fill="#b3264f" d="M32 49l-3.2-2.9C19 37.3 13 32 13 25.4 13 20.2 17 16 22.100 16c3.900 0 7.600 2 9.900 5 2.300-3 6-5 9.900-5C47 16 51 20.200 51 25.400c0 6.600-6 11.900-15.800 20.700L32 49z"/></svg>\n')
+    write("google2b85ffb564e46bec.html", "google-site-verification: google2b85ffb564e46bec.html")
     write("CNAME", "miritbooks.com\n")
     write(".nojekyll", "")
     shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "assets", "style.css"))
