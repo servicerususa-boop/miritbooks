@@ -11,6 +11,7 @@ BASE = "https://miritbooks.com"
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 OUT = os.path.join(ROOT, "site")
 TODAY = "2026-11-19"
+INDEXNOW_KEY = "7c1e5b9a4d2f48e6a3b0c9d8e7f61a25"
 SITE = "מירית ספרים"
 
 SITEMAP = []  # (path, lang, alternates dict)
@@ -102,6 +103,8 @@ def book_ld(key, lang="he"):
             },
         },
     }
+    if key == "likes":
+        d["datePublished"] = "2018"
     if key == "bat":
         d["workExample"] = {"@type": "Book", "bookFormat": "https://schema.org/EBook", "inLanguage": "he", "url": EVRIT}
     return d
@@ -469,6 +472,16 @@ PRODUCT_COPY = {
 }
 
 
+RELATED = {'bat': ['novel-about-motherhood-and-wanting-a-daughter', 'about-the-novel-bat', 'book-club-guide-bat', 'gift-book-for-mom-or-friend'], 'likes': ['novels-about-social-media-addiction', '102-likes-social-media-novel', 'how-to-choose-a-book-club-book', 'gift-book-for-mom-or-friend']}
+
+
+def related_html(key):
+    by = {p["slug"]: p for p in POSTS}
+    items = [by[x] for x in RELATED[key] if x in by]
+    return ('<section class="band band--mist"><div class="wrap"><div class="band__head"><h2>קראו עוד</h2></div>'
+            + posts_list(items) + '</div></section>')
+
+
 def build_product(key):
     b, c = BOOKS[key], PRODUCT_COPY[key]
     counter = (f'<p class="likes" aria-label="102 לייקים">{ICON_HEART}<span data-count-to="102">102</span></p>' if key == "likes" else "")
@@ -503,7 +516,8 @@ def build_product(key):
 <div class="band__head"><h2>שאלות נפוצות</h2></div>
 {faq_html(faq)}
 <p style="margin-top:1.5rem"><a href="/shipping/">כל הפרטים על משלוחים ותשלום</a></p>
-</div></section>'''
+</div></section>
+{related_html(key)}'''
     items = [("/", "בית"), ("/store/", "חנות"), (b["path"], b["title"])]
     render(b["path"], "he", c["title"], c["desc"], crumbs_html(items) + body,
            [crumbs_ld(items), book_ld(key), faq_ld(faq), PERSON], og_image=og_for(key),
@@ -830,6 +844,7 @@ WhatsApp {PHONE_INTL} (Hebrew and English)
     write("assets/favicon.svg", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#f2b8c6"/>'
           '<path fill="#b3264f" d="M32 49l-3.2-2.9C19 37.3 13 32 13 25.4 13 20.2 17 16 22.100 16c3.900 0 7.600 2 9.900 5 2.300-3 6-5 9.900-5C47 16 51 20.200 51 25.400c0 6.600-6 11.900-15.800 20.700L32 49z"/></svg>\n')
     write("google2b85ffb564e46bec.html", "google-site-verification: google2b85ffb564e46bec.html")
+    write(INDEXNOW_KEY + ".txt", INDEXNOW_KEY)
     write("CNAME", "miritbooks.com\n")
     write(".nojekyll", "")
     shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "assets", "style.css"))
