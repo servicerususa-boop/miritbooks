@@ -6,6 +6,10 @@ PHONE_DISPLAY = "054-4917687"
 PHONE_E164 = "972544917687"
 PHONE_INTL = "+972-54-491-7687"
 EVRIT = "https://www.e-vrit.co.il/Product/38535/%D7%91%D7%AA"
+# Real profile URLs for Mirit (Goodreads, Simania, e-vrit author page, Facebook, Instagram, ...).
+# Emitted as schema.org sameAs on the Person and Organization nodes when non-empty.
+# Add only URLs that actually exist and that Mirit controls or is listed on.
+SAME_AS = []
 PAYBOX = {
     "bat": "https://links.payboxapp.com/GM6SFI06p1b",
     "likes": "https://links.payboxapp.com/SMJqvqkfq1b",

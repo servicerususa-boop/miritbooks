@@ -10,7 +10,7 @@ from content import *  # noqa
 BASE = "https://miritbooks.com"
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 OUT = os.path.join(ROOT, "site")
-TODAY = "2026-11-19"
+TODAY = "2026-11-20"
 INDEXNOW_KEY = "7c1e5b9a4d2f48e6a3b0c9d8e7f61a25"
 SITE = "מירית ספרים"
 
@@ -67,6 +67,11 @@ PERSON = {
 }
 
 
+if SAME_AS:
+    ORG["sameAs"] = list(SAME_AS)
+    PERSON["sameAs"] = list(SAME_AS)
+
+
 def ld(obj):
     if isinstance(obj, dict) and "@context" not in obj:
         obj = {"@context": "https://schema.org", **obj}
@@ -86,7 +91,7 @@ def book_ld(key, lang="he"):
         "image": BASE + og_for(key),
         "inLanguage": "he",
         "bookFormat": "https://schema.org/Paperback",
-        "author": {"@type": "Person", "name": "מירית כחלון", "alternateName": "Mirit Kahalon", "url": BASE + "/about/"},
+        "author": {"@type": "Person", "@id": BASE + "/about/#mirit", "name": "מירית כחלון", "alternateName": "Mirit Kahalon", "url": BASE + "/about/"},
         "brand": {"@type": "Brand", "name": SITE},
         "offers": {
             "@type": "Offer",
@@ -107,6 +112,7 @@ def book_ld(key, lang="he"):
         d["datePublished"] = "2018"
     if key == "bat":
         d["workExample"] = {"@type": "Book", "bookFormat": "https://schema.org/EBook", "inLanguage": "he", "url": EVRIT}
+        d["sameAs"] = [EVRIT]
     return d
 
 
