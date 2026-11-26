@@ -341,6 +341,23 @@ def qr_block(key, lang="he"):
             f'<figcaption>{txt}</figcaption></figure>')
 
 
+def after_pay(key):
+    """What to do right after paying: address + dedication by WhatsApp (prevents paid orders with no address)."""
+    name = {"bat": "בת", "likes": "102 לייקים", "bundle": "מארז שני הספרים"}[key]
+    msg = f"שלום מירית, שילמתי על {name}. כתובת למשלוח: \nשם מלא וטלפון: \nהקדשה (אם רוצים): "
+    return (f'<div class="note"><p><strong>שילמתם? עוד צעד אחד.</strong> שלחו למירית בוואטסאפ את כתובת המשלוח, מספר טלפון '
+            f'ואת ההקדשה שתרצו, והיא תאשר איתכם מתי הספר יוצא אליכם.</p>'
+            f'<div class="actions"><a class="btn btn-wa" href="{wa(msg)}" rel="noopener">{ICON_WA}שליחת כתובת ופרטי הקדשה</a></div></div>')
+
+
+def review_block(key):
+    name = {"bat": "בת", "likes": "102 לייקים"}[key]
+    msg = f"שלום מירית, קראתי את {name} ואשמח להשאיר ביקורת: "
+    return (f'<section class="band"><div class="wrap prose"><h2>קראתם את הספר?</h2>'
+            f'<p>ביקורת קצרה, אפילו שורה אחת, עוזרת לקוראים הבאים להחליט. שלחו אותה למירית בוואטסאפ, ובאישורכם היא תופיע כאן.</p>'
+            f'<div class="actions"><a class="btn btn-ghost" href="{wa(msg)}" rel="noopener">{ICON_WA}כתבו ביקורת</a></div></div></section>')
+
+
 def bundle_block(h="h2"):
     return f'''<div class="bundle">
 <div><{h}>מארז במתנה: שני הספרים עם הקדשה אישית</{h}>
@@ -373,6 +390,7 @@ def share_block(title, url, lang="he"):
     if lang == "he":
         return (f'<div class="share"><button class="btn btn-ghost" type="button" data-share data-url="{url}" data-title="{esc(title)}" data-done="הקישור הועתק">שיתוף</button>'
                 f'<a class="btn btn-ghost" href="https://wa.me/?text={quote(title + " " + url)}" rel="noopener">שליחה בוואטסאפ</a>'
+                f'<a class="btn btn-ghost" href="https://www.facebook.com/sharer/sharer.php?u={quote(url, safe="")}" rel="noopener">שיתוף בפייסבוק</a>'
                 f'<span class="share__status" role="status" aria-live="polite" data-share-status></span></div>')
     return (f'<div class="share"><button class="btn btn-ghost" type="button" data-share data-url="{url}" data-title="{esc(title)}" data-done="Link copied">Share</button>'
             f'<a class="btn btn-ghost" href="https://wa.me/?text={quote(title + " " + url)}" rel="noopener">Send on WhatsApp</a>'
@@ -509,6 +527,7 @@ def build_product(key):
 {evrit}
 </div>
 {qr_block(key)}
+{after_pay(key)}
 {share_block(c["h1"], url)}
 </div></div></section>
 <section class="band band--mist"><div class="wrap prose">
@@ -523,6 +542,7 @@ def build_product(key):
 {faq_html(faq)}
 <p style="margin-top:1.5rem"><a href="/shipping/">כל הפרטים על משלוחים ותשלום</a></p>
 </div></section>
+{review_block(key)}
 {related_html(key)}'''
     items = [("/", "בית"), ("/store/", "חנות"), (b["path"], b["title"])]
     render(b["path"], "he", c["title"], c["desc"], crumbs_html(items) + body,
@@ -535,6 +555,7 @@ def build_bundle():
 <section class="band band--ink"><div class="wrap">{bundle_block("h2")}</div></section>
 <section class="band"><div class="wrap prose">
 {qr_block("bundle")}
+{after_pay("bundle")}
 <h2>מה במארז</h2>
 <ul><li>הרומן <a href="/books/bat/">בת</a> (מחיר נפרד: ₪45 ועוד ₪15 משלוח)</li>
 <li>הרומן <a href="/books/102-likes/">102 לייקים</a> (מחיר נפרד: ₪39 ועוד ₪15 משלוח)</li>
